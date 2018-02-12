@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.ematos.basic.LineEntry;
 
@@ -14,8 +15,10 @@ import com.ematos.basic.LineEntry;
  *
  */
 public class LineEntriesLoader {
+	private final static Logger LOG = Logger.getLogger(LineEntriesLoader.class.getName());
 	
 	public static List<LineEntry> getLineEntriesFromFile(String filePath) {
+		LOG.info(String.format("Reading file: %s", filePath));
 		List<LineEntry> result = new ArrayList<LineEntry>();
 		byte[] bytes;
 		FileReader in;
@@ -25,8 +28,9 @@ public class LineEntriesLoader {
 			br = new BufferedReader(in);
 
 			while (br.readLine() != null) {
-				bytes = br.readLine().getBytes("ISO-8859-1");
+				bytes = br.readLine().getBytes("Cp1252");
 				result.add(getLineEntryFromString(new String(bytes, "UTF-8")));
+//				LOG.info(new String(bytes, "UTF-8"));
 			}
 			in.close();
 		} catch (FileNotFoundException e1) {

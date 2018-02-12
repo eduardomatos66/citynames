@@ -63,6 +63,18 @@ public class LineEntry {
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		LineEntry o = (LineEntry) obj;
+		
+		return this.stateName.equals(o.getStateName())
+				&& this.stateShort.equals(o.getStateShort())
+				&& this.cityName.equals(o.getCityName());
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
