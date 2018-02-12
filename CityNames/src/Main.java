@@ -1,9 +1,7 @@
 
 public class Main {
 	
-	public Main() {
-		// TODO Auto-generated constructor stub
-	}
+	public Main() {	}
 	
 	public static void main(String[] args) {
 		System.out.println("Initial Creation");
