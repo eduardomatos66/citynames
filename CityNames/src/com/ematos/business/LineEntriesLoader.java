@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.ematos.business;
 
 import java.io.BufferedReader;
@@ -29,7 +26,6 @@ public class LineEntriesLoader {
 
 			while (br.readLine() != null) {
 				bytes = br.readLine().getBytes("ISO-8859-1");
-//				System.out.println(new String(bytes, "UTF-8"));
 				result.add(getLineEntryFromString(new String(bytes, "UTF-8")));
 			}
 			in.close();
@@ -44,11 +40,5 @@ public class LineEntriesLoader {
 	private static LineEntry getLineEntryFromString(String string) {
 		String[] data = string.split("\\|");
 		return new LineEntry(data[0], data[1], data[2]);
-	}
-
-	public static void main(String[] args) {
-		List<LineEntry> ouput = LineEntriesLoader.getLineEntriesFromFile("entries/States+Cities.txt");
-		System.out.println("Finished.. Lines: " + ouput.size());
-
 	}
 }
