@@ -6,7 +6,7 @@ import java.util.List;
 import com.ematos.basic.LineEntry;
 import com.ematos.basic.StringIssue;
 
-import exception.ListSizeException;
+import com.ematos.exception.ListSizeException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
