@@ -1,9 +1,10 @@
-package com.ematos.business;
+package com.ematos.business.comparator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ematos.basic.LineEntry;
+import com.ematos.basic.StringIssue;
 
 import exception.ListSizeException;
 
@@ -18,30 +19,30 @@ public class LineEntryComparator {
 	private final static Logger LOG = Logger.getLogger(LineEntryComparator.class.getName());
 
 	public void compareEntriesList(List<LineEntry> correctEntries, List<LineEntry> checkEntries) {
-		List<String> comparisonListResult = new ArrayList<String>();
+		List<StringIssue> comparisonListResult = new ArrayList<StringIssue>();
 		this.compareListSize(correctEntries, checkEntries);
 		for (int i = 0; i < checkEntries.size(); i++) {
 			comparisonListResult.add(this.compareEntries(correctEntries.get(i), checkEntries.get(i)));
 		}
 	}
 
-	private String compareEntries(LineEntry correctEntry, LineEntry checkEntry) {
-		String result = "N/A";
+	private StringIssue compareEntries(LineEntry correctEntry, LineEntry checkEntry) {
+		StringIssue result = null;
 		if (correctEntry.equals(checkEntry) == false) {
-			String resultCompStateName = this.compareStrings(correctEntry.getStateName(), checkEntry.getStateName());
-			String resultCompStateShort = this.compareStrings(correctEntry.getStateShort(), checkEntry.getStateShort());
-			String resultCompCityName = this.compareStrings(correctEntry.getCityName(), checkEntry.getCityName());
+			StringIssue resultCompStateName = this.compareStrings(correctEntry.getStateName(), checkEntry.getStateName());
+			StringIssue resultCompStateShort = this.compareStrings(correctEntry.getStateShort(), checkEntry.getStateShort());
+			StringIssue resultCompCityName = this.compareStrings(correctEntry.getCityName(), checkEntry.getCityName());
 		}
 		return result;
 	}
 
-	private String compareStrings(String correctString, String checkString) {
-		String result;
+	private StringIssue compareStrings(String correctString, String checkString) {
+		StringIssue result;
 		
 		if (correctString.equals(checkString)) {
-			result = "None";
+			result = null;
 		} else if (correctString.length() == checkString.length()) {
-			result = this.compareSameSizeString(correctString, checkString);
+			result = new StringSameSizeComparator().compareString(correctString, checkString);
 		} else {
 			result = this.compareDiffSizeString(correctString, checkString);
 		}
@@ -49,26 +50,9 @@ public class LineEntryComparator {
 		return result;
 	}
 
-	private String compareDiffSizeString(String correctString, String checkString) {
-		String diff = "";
+	private StringIssue compareDiffSizeString(String correctString, String checkString) {
+		StringIssue diff = null;
 				
-		return diff;
-	}
-
-	private String compareSameSizeString(String correctString, String checkString) {
-		String diff = "";
-		char[] correctChars = correctString.toCharArray();
-		char[] checkChars = checkString.toCharArray();
-		
-		for (int i = 0; i < correctChars.length; i++) {
-			char correct = correctChars[i];
-			char check = checkChars[i];
-			
-			if (correct != check) {
-				diff += String.format("'%s' char at position %s instead of %s; ", check, i+1, correct);
-			}
-		}
-		
 		return diff;
 	}
 
@@ -100,6 +84,10 @@ public class LineEntryComparator {
 		String checkString13 = "123ife";
 		String checkString14 = "R123e";
 		String checkString15 = "Rec123";
+		String checkString16 = "1ec123";
+		String checkString17 = "R1c123";
+		String checkString18 = "R1ci23";
+		String checkString19 = "R12i34";
 		
 		comparator.compareStrings(correctString, correctString);
 		comparator.compareStrings(correctString, checkString00);
@@ -118,5 +106,9 @@ public class LineEntryComparator {
 		comparator.compareStrings(correctString, checkString13);
 		comparator.compareStrings(correctString, checkString14);
 		comparator.compareStrings(correctString, checkString15);
+		comparator.compareStrings(correctString, checkString16);
+		comparator.compareStrings(correctString, checkString17);
+		comparator.compareStrings(correctString, checkString18);
+		comparator.compareStrings(correctString, checkString19);
 	}
 }
