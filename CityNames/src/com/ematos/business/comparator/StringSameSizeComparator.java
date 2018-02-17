@@ -3,12 +3,21 @@ package com.ematos.business.comparator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ematos.basic.IssueType;
 import com.ematos.basic.StringIssue;
+import com.ematos.constant.IssueTypeName;
 
+/**
+ * @author EduardoMatos
+ *
+ */
 public class StringSameSizeComparator implements StringComparator {
 
 	public StringSameSizeComparator() {	}
 
+	/* (non-Javadoc)
+	 * @see com.ematos.business.comparator.StringComparator#compareString(java.lang.String, java.lang.String)
+	 */
 	public StringIssue compareString(String correctString, String checkString) {
 		List<Integer> diffPositions = new ArrayList<Integer>();
 		char[] correctChars = correctString.toCharArray();
@@ -23,45 +32,75 @@ public class StringSameSizeComparator implements StringComparator {
 				diffPositions.add(i);
 			}
 		}
-		System.out.println("");
 		return prepareDiffOutput(correctString, checkString, diffPositions);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.ematos.business.comparator.StringComparator#prepareDiffOutput(java.lang.String, java.lang.String, java.util.List)
+	 */
 	public StringIssue prepareDiffOutput(String correctString, String checkString, List<Integer> diffPositions) {
 		StringIssue result = new StringIssue(correctString, checkString);
-		int lastReadPosition = Integer.MIN_VALUE;		
+		
 		int initOfInterval = Integer.MIN_VALUE;
 		boolean isSequency = false;
 		
-		for (Integer pos : diffPositions) {
-			
-			if (pos == lastReadPosition + 1) {
-				isSequency = true;
-				initOfInterval = lastReadPosition;
+		for (int i = 0; i < diffPositions.size(); i++) {
+			Integer currentCharPosition = diffPositions.get(i);
+			if (i == diffPositions.size()-1 || currentCharPosition != diffPositions.get(i+1)-1) {				
 				
-			} else if (isSequency && pos != lastReadPosition + 1) {
-				System.out.print(" Find sequence!! ");
+				IssueType issueType = createIssueType(
+						correctString,
+						checkString,
+						initOfInterval,
+						isSequency,
+						currentCharPosition);
+				
+				result.addIssueType(issueType);
 				isSequency = false;
-
 				initOfInterval = Integer.MIN_VALUE;
 				
-//				if (initOfInterval != lastReadPosition) {
-//					initOfInterval = lastReadPosition;
-//				} else {
-//					initOfInterval = Integer.MIN_VALUE;
-//				}
+			} else {
+				isSequency = true;
 				
-			} 
-			lastReadPosition = pos;
-
-			System.out.print(pos + " ");
+				if (initOfInterval == Integer.MIN_VALUE) {
+					initOfInterval = currentCharPosition;
+				}
+			}
 		}
-		
-		if (isSequency) {
-			System.out.print(" Find sequence!! ");
-			isSequency = false;
-		}
-		System.out.println("");
 		return result;
+	}
+
+	/**
+	 * Create issue type
+	 * 
+	 * @param correctString
+	 * @param checkString
+	 * @param initOfInterval
+	 * @param isSequency
+	 * @param currentCharPosition
+	 * @return
+	 */
+	private IssueType createIssueType(String correctString, String checkString, int initOfInterval, boolean isSequency,
+			Integer currentCharPosition) {
+		IssueTypeName issueTypeName = IssueTypeName.REPLACED_CHAR;
+		
+		IssueType issueType = null;
+		if (isSequency == false) {
+			issueType = new IssueType(
+					issueTypeName,
+					currentCharPosition,
+					correctString.charAt(currentCharPosition) + "",
+					checkString.charAt(currentCharPosition) + ""
+			);
+		} else {
+			issueTypeName = IssueTypeName.REPLACED_STRING;
+			issueType = new IssueType(
+					issueTypeName,
+					initOfInterval,
+					correctString.substring(initOfInterval, currentCharPosition+1),
+					checkString.substring(initOfInterval, currentCharPosition+1)
+			);
+		}
+		return issueType;
 	}
 }

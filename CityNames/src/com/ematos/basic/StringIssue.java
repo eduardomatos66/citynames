@@ -1,6 +1,7 @@
 package com.ematos.basic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -66,5 +67,26 @@ public class StringIssue {
 	@SuppressWarnings("unused")
 	private void setIssueType(List<IssueType> issueType) {
 		this.issueType = issueType;
+	}
+	
+	/**
+	 * Add issue to issue type list.
+	 * 
+	 * @param issueType
+	 */
+	public void addIssueType(IssueType issueType) {
+		this.issueType.add(issueType);
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		String result = "";
+		for (IssueType issue : issueType) {
+			result += issue + "; ";
+		}
+		return result;
 	}
 }

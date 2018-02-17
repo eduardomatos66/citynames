@@ -10,17 +10,21 @@ public class IssueType {
 	
 	private IssueTypeName issueTypeName;
 	private int issuePosition;
-	private String wrongString;
+	private String correctSubstring;
+	private String wrongSubstring;
 	
 	/**
 	 * @param issueTypeName
 	 * @param issuePosition
-	 * @param wrongString
+	 * @param correctSubstring
+	 * @param wrongSubstring
 	 */
-	public IssueType(IssueTypeName issueTypeName, int issuePosition, String wrongString) {
+	public IssueType(IssueTypeName issueTypeName, int issuePosition, String correctSubstring, String wrongSubstring) {
+		super();
 		this.issueTypeName = issueTypeName;
 		this.issuePosition = issuePosition;
-		this.wrongString = wrongString;
+		this.correctSubstring = correctSubstring;
+		this.wrongSubstring = wrongSubstring;
 	}
 
 	/**
@@ -52,16 +56,47 @@ public class IssueType {
 	}
 
 	/**
-	 * @return the wrongString
+	 * @return the correctSubstring
 	 */
-	public String getWrongString() {
-		return wrongString;
+	public String getCorrectSubstring() {
+		return correctSubstring;
 	}
 
 	/**
-	 * @param wrongString the wrongString to set
+	 * @param correctSubstring the correctSubstring to set
 	 */
-	public void setWrongString(String wrongString) {
-		this.wrongString = wrongString;
+	public void setCorrectSubstring(String correctSubstring) {
+		this.correctSubstring = correctSubstring;
+	}
+
+	/**
+	 * @return the wrongSubstring
+	 */
+	public String getWrongSubstring() {
+		return wrongSubstring;
+	}
+
+	/**
+	 * @param wrongSubstring the wrongSubstring to set
+	 */
+	public void setWrongSubstring(String wrongSubstring) {
+		this.wrongSubstring = wrongSubstring;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		String result = "";
+		if (this.issueTypeName == IssueTypeName.REPLACED_CHAR) {
+			result = String.format("char '%s' at position %d was found instead of '%s'", this.wrongSubstring, this.issuePosition+1, this.correctSubstring);
+		} else if (this.issueTypeName == IssueTypeName.REPLACED_STRING) {
+			result = String.format("substring '%s' starting at position %d was found instead of '%s'", this.wrongSubstring, this.issuePosition+1, this.correctSubstring);
+		} else {
+			 result = "";
+		}
+		
+		return result;
 	}
 }
